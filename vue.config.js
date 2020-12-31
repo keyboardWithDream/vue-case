@@ -13,5 +13,6 @@ module.exports = {
   devServer: {
     host: 'localhost',
     port: 80
-  }
+  },
+  lintOnSave: false
 }
