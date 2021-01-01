@@ -1,13 +1,14 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物车</div></nav-bar>
-    <scroll class="content">
+    <scroll class="content" ref="scroll">
       <swiper :items="banners.list"></swiper>
       <recommend-view :recommends="recommends.list"/>
       <feature-view/>
       <tab-control class="tab-control" :titles="titles" @itemClick="tabClick"/>
       <goods-list :goods="showGoods"/>
     </scroll>
+    <back-top @click.native="backClick"/>
   </div>
 </template>
 
@@ -17,6 +18,7 @@ import Swiper from "@/components/common/swiper/Swiper";
 import TabControl from "@/components/content/tabControl/TabControl";
 import GoodsList from "@/components/content/goods/GoodsList";
 import Scroll from "@/components/common/scroll/Scroll";
+import BackTop from "@/components/content/backtop/BackTop";
 
 import RecommendView from "@/views/home/childComps/RecommendView";
 import FeatureView from "@/views/home/childComps/FeatureView";
@@ -32,7 +34,8 @@ export default {
     RecommendView,
     FeatureView,
     GoodsList,
-    Scroll
+    Scroll,
+    BackTop
   },
   data() {
     return {
@@ -57,6 +60,9 @@ export default {
       }else if (2 === index) {
         this.currentType = 'sell'
       }
+    },
+    backClick() {
+      this.$refs.scroll.scrollTo(0, 0, 500)
     },
     //网络请求方法
     getHomeMultiData() {
