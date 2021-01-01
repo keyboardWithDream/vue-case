@@ -2,24 +2,27 @@
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物车</div></nav-bar>
     <swiper :items="banners.list"></swiper>
+    <recommend-view :recommends="recommends.list"/>
   </div>
 </template>
 
 <script>
 import NavBar from "@/components/common/navbar/NavBar";
 import Swiper from "@/components/common/swiper/Swiper";
+import RecommendView from "@/views/home/childComps/RecommendView";
 import {getHomeMultiData} from "@/network/home";
 
 export default {
   name: "Home",
   components: {
     NavBar,
-    Swiper
+    Swiper,
+    RecommendView
   },
   data() {
     return {
-      banners: [],
-      recommends: []
+      banners: null,
+      recommends: null
     }
   },
   created() {
