@@ -1,7 +1,10 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物车</div></nav-bar>
-    <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
+    <scroll class="content" ref="scroll"
+            :probe-type="3"
+            :pull-up-load="true"
+            @scroll="contentScroll" @pullingUp="loadMore">
       <swiper :items="banners.list"></swiper>
       <recommend-view :recommends="recommends.list"/>
       <feature-view/>
@@ -68,6 +71,10 @@ export default {
     contentScroll(position) {
       this.isShowBackTop = (-position.y > 1000)
     },
+    loadMore() {
+      this.getHomeGoods(this.currentType)
+      this.$refs.scroll.scroll.refresh()
+    },
     //网络请求方法
     getHomeMultiData() {
       getHomeMultiData().then(res => {
@@ -84,6 +91,7 @@ export default {
         //push进数组进行保存
         this.goods[type].list.push(...res.data.list)
         this.goods[type].page += 1
+        this.$refs.scroll.finishPullUp()
       }).catch(err => {
         console.log(err)
       })
