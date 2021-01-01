@@ -4,8 +4,8 @@
     <swiper :items="banners.list"></swiper>
     <recommend-view :recommends="recommends.list"/>
     <feature-view/>
-    <tab-control class="tab-control" :titles="titles"/>
-    <goods-list :goods="goods['pop'].list"/>
+    <tab-control class="tab-control" :titles="titles" @itemClick="tabClick"/>
+    <goods-list :goods="showGoods"/>
     <ul>
       <li>列表1</li>
       <li>列表2</li>
@@ -91,10 +91,22 @@ export default {
         'pop': {page: 0, list: []},
         'new': {page: 0, list: []},
         'sell': {page: 0, list: []}
-      }
+      },
+      currentType: 'pop'
     }
   },
   methods: {
+    //事件监听方法
+    tabClick(index) {
+      if (0 === index) {
+        this.currentType = 'pop'
+      }else if (1 === index) {
+        this.currentType = 'new'
+      }else if (2 === index) {
+        this.currentType = 'sell'
+      }
+    },
+    //网络请求方法
     getHomeMultiData() {
       getHomeMultiData().then(res => {
         this.banners = res.data.banner
@@ -113,6 +125,11 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    }
+  },
+  computed: {
+    showGoods() {
+      return this.goods[this.currentType].list;
     }
   },
   created() {
@@ -134,12 +151,12 @@ export default {
 .home-nav {
   background-color: var(--color-tint);
   color: #f6f6f6;
-  z-index: 9;
+  z-index: 10;
 }
 
 .tab-control {
   position: sticky;
   top: 44px;
-  z-index: 9;
+  z-index: 5;
 }
 </style>
