@@ -5,6 +5,7 @@
     <recommend-view :recommends="recommends.list"/>
     <feature-view/>
     <tab-control class="tab-control" :titles="titles"/>
+    <goods-list :goods="goods['pop'].list"/>
     <ul>
       <li>列表1</li>
       <li>列表2</li>
@@ -64,6 +65,7 @@
 import NavBar from "@/components/common/navbar/NavBar";
 import Swiper from "@/components/common/swiper/Swiper";
 import TabControl from "@/components/content/tabControl/TabControl";
+import GoodsList from "@/components/content/goods/GoodsList";
 
 import RecommendView from "@/views/home/childComps/RecommendView";
 import FeatureView from "@/views/home/childComps/FeatureView";
@@ -77,7 +79,8 @@ export default {
     NavBar,
     Swiper,
     RecommendView,
-    FeatureView
+    FeatureView,
+    GoodsList
   },
   data() {
     return {
@@ -131,10 +134,12 @@ export default {
 .home-nav {
   background-color: var(--color-tint);
   color: #f6f6f6;
+  z-index: 9;
 }
 
 .tab-control {
   position: sticky;
   top: 44px;
+  z-index: 9;
 }
 </style>
