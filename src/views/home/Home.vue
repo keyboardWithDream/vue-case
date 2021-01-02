@@ -65,7 +65,8 @@ export default {
       currentType: 'pop',
       isShowBackTop: true,
       tabOffsetTop: 0,
-      isTabFixed: false
+      isTabFixed: false,
+      saveY: 0
     }
   },
   methods: {
@@ -98,7 +99,6 @@ export default {
     swiperImageLoad() {
       //获取tabControl的offsetTop
       this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
-      console.log(this.tabOffsetTop)
     },
     /**
      * 网络请求方法
@@ -145,6 +145,15 @@ export default {
     this.$bus.$on('itemImageLoad', () => {
       refresh()
     })
+  },
+  activated() {
+    //返回时设置位置
+    this.$refs.scroll.scrollTo(0, this.saveY, 0)
+    this.$refs.scroll.refresh()
+  },
+  deactivated() {
+    //离开时保存位置
+    this.saveY = this.$refs.scroll.getScrollY()
   }
 }
 </script>
