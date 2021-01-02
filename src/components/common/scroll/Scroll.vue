@@ -28,13 +28,13 @@ export default {
   },
   methods: {
     scrollTo(x, y, time=300) {
-      this.scroll.scrollTo(x, y, time)
+      this.scroll && this.scroll.scrollTo(x, y, time)
     },
     finishPullUp() {
       this.scroll.finishPullUp()
     },
     refresh() {
-      this.scroll.refresh()
+      this.scroll && this.scroll.refresh()
     }
   },
   mounted() {
@@ -53,9 +53,6 @@ export default {
     this.scroll.on('pullingUp', () => {
       this.$emit('pullingUp')
     })
-
-    //刷新高度
-    this.scroll.refresh()
   }
 }
 </script>

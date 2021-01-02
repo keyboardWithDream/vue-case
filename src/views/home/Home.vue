@@ -55,7 +55,19 @@ export default {
     }
   },
   methods: {
-    //事件监听方法
+    /**
+     * 事件监听方法
+     */
+    //防抖函数封装
+    debounce(func, delay = 10) {
+      let timer = null;
+      return function (...args) {
+        if (timer) clearTimeout(timer)
+        timer = setTimeout(() => {
+          func.apply(this, args)
+        }, delay)
+      }
+    },
     tabClick(index) {
       if (0 === index) {
         this.currentType = 'pop'
@@ -71,7 +83,9 @@ export default {
     contentScroll(position) {
       this.isShowBackTop = (-position.y > 1000)
     },
-    //网络请求方法
+    /**
+     * 网络请求方法
+     */
     getHomeMultiData() {
       getHomeMultiData().then(res => {
         this.banners = res.data.banner
@@ -104,9 +118,13 @@ export default {
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
+  },
+  mounted() {
+    //防抖函数
+    const  refresh = this.debounce(this.$refs.scroll.refresh, 500)
     //监听图片加载
     this.$bus.$on('itemImageLoad', () => {
-      this.$refs.scroll.refresh()
+      refresh()
     })
   }
 }
