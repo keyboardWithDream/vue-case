@@ -2,7 +2,7 @@
   <el-carousel height="220px" :interval="5000" arrow="always">
     <el-carousel-item v-for="item in items">
       <a :href="item.link">
-        <img class="swiper_image" :src="item.image" alt="">
+        <img class="swiper_image" :src="item.image" alt="推荐" @load="imageLoad">
       </a>
     </el-carousel-item>
   </el-carousel>
@@ -18,6 +18,17 @@ export default {
       default() {
         return ['暂无数据，请稍后']
       }
+    }
+  },
+  data() {
+    return {
+      isLoad: false
+    }
+  },
+  methods: {
+    imageLoad() {
+      if (!this.isLoad) this.$emit('swiperImageLoad')
+      this.isLoad = true
     }
   }
 }

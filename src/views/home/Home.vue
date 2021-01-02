@@ -1,15 +1,24 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物车</div></nav-bar>
+    <tab-control
+      ref="tabControlTop"
+      class="tab-controller"
+      :titles="titles"
+      @itemClick="tabClick"
+      v-show="isTabFixed"/>
     <scroll class="content" ref="scroll"
             :probe-type="3"
             :pull-up-load="true"
             @pullingUp="loadMore"
             @scroll="contentScroll">
-      <swiper :items="banners.list"></swiper>
+      <swiper :items="banners.list" @swiperImageLoad="swiperImageLoad"></swiper>
       <recommend-view :recommends="recommends.list"/>
       <feature-view/>
-      <tab-control class="tab-control" :titles="titles" @itemClick="tabClick"/>
+      <tab-control
+        ref="tabControl"
+        :titles="titles"
+        @itemClick="tabClick"/>
       <goods-list :goods="showGoods"/>
     </scroll>
     <back-top @click.native="backClick" v-show="isShowBackTop"/>
@@ -54,7 +63,9 @@ export default {
         'sell': {page: 0, list: []}
       },
       currentType: 'pop',
-      isShowBackTop: true
+      isShowBackTop: true,
+      tabOffsetTop: 0,
+      isTabFixed: false
     }
   },
   methods: {
@@ -69,15 +80,25 @@ export default {
       }else if (2 === index) {
         this.currentType = 'sell'
       }
+      this.$refs.tabControlTop.currentIndex = index;
+      this.$refs.tabControl.currentIndex = index;
     },
     backClick() {
       this.$refs.scroll.scrollTo(0, 0, 500)
     },
     contentScroll(position) {
-      this.isShowBackTop = (-position.y > 1000)
+      //判断BackTop是否显示
+      this.isShowBackTop = ((-position.y) > 1000)
+      //决定tabControl是否吸顶
+      this.isTabFixed = ((-position.y) > this.tabOffsetTop)
     },
     loadMore() {
       this.getHomeGoods(this.currentType)
+    },
+    swiperImageLoad() {
+      //获取tabControl的offsetTop
+      this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
+      console.log(this.tabOffsetTop)
     },
     /**
      * 网络请求方法
@@ -120,7 +141,7 @@ export default {
   mounted() {
     //防抖函数
     const  refresh = debounce(this.$refs.scroll.refresh, 50)
-    //监听图片加载
+    //监听图片加载完成
     this.$bus.$on('itemImageLoad', () => {
       refresh()
     })
@@ -130,20 +151,20 @@ export default {
 
 <style scoped>
 #home {
-  padding-top: 44px;
+  //padding-top: 44px;
   height: 100vh;
+  position: relative;
 }
 
 .home-nav {
   background-color: var(--color-tint);
   color: #f6f6f6;
-  z-index: 10;
 }
 
-.tab-control {
-  position: sticky;
+.tab-controller {
+  position: relative;
+  z-index: 9;
   top: 44px;
-  z-index: 5;
 }
 
 .content {
