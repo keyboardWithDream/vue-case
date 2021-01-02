@@ -23,6 +23,8 @@ import GoodsList from "@/components/content/goods/GoodsList";
 import Scroll from "@/components/common/scroll/Scroll";
 import BackTop from "@/components/content/backtop/BackTop";
 
+import {debounce} from "@/common/utils";
+
 import RecommendView from "@/views/home/childComps/RecommendView";
 import FeatureView from "@/views/home/childComps/FeatureView";
 
@@ -58,16 +60,6 @@ export default {
     /**
      * 事件监听方法
      */
-    //防抖函数封装
-    debounce(func, delay = 10) {
-      let timer = null;
-      return function (...args) {
-        if (timer) clearTimeout(timer)
-        timer = setTimeout(() => {
-          func.apply(this, args)
-        }, delay)
-      }
-    },
     tabClick(index) {
       if (0 === index) {
         this.currentType = 'pop'
@@ -121,7 +113,7 @@ export default {
   },
   mounted() {
     //防抖函数
-    const  refresh = this.debounce(this.$refs.scroll.refresh, 500)
+    const  refresh = debounce(this.$refs.scroll.refresh, 500)
     //监听图片加载
     this.$bus.$on('itemImageLoad', () => {
       refresh()
