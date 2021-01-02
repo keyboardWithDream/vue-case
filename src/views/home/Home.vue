@@ -4,6 +4,7 @@
     <scroll class="content" ref="scroll"
             :probe-type="3"
             :pull-up-load="true"
+            @pullingUp="loadMore"
             @scroll="contentScroll">
       <swiper :items="banners.list"></swiper>
       <recommend-view :recommends="recommends.list"/>
@@ -75,6 +76,9 @@ export default {
     contentScroll(position) {
       this.isShowBackTop = (-position.y > 1000)
     },
+    loadMore() {
+      this.getHomeGoods(this.currentType)
+    },
     /**
      * 网络请求方法
      */
@@ -93,6 +97,8 @@ export default {
         //push进数组进行保存
         this.goods[type].list.push(...res.data.list)
         this.goods[type].page += 1
+        //完成上拉加载更多
+        this.$refs.scroll.finishPullUp()
       }).catch(err => {
         console.log(err)
       })
@@ -113,7 +119,7 @@ export default {
   },
   mounted() {
     //防抖函数
-    const  refresh = debounce(this.$refs.scroll.refresh, 500)
+    const  refresh = debounce(this.$refs.scroll.refresh, 50)
     //监听图片加载
     this.$bus.$on('itemImageLoad', () => {
       refresh()
