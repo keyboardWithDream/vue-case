@@ -4,7 +4,7 @@
     <scroll class="content" ref="scroll"
             :probe-type="3"
             :pull-up-load="true"
-            @scroll="contentScroll" @pullingUp="loadMore">
+            @scroll="contentScroll">
       <swiper :items="banners.list"></swiper>
       <recommend-view :recommends="recommends.list"/>
       <feature-view/>
@@ -71,10 +71,6 @@ export default {
     contentScroll(position) {
       this.isShowBackTop = (-position.y > 1000)
     },
-    loadMore() {
-      this.getHomeGoods(this.currentType)
-      this.$refs.scroll.scroll.refresh()
-    },
     //网络请求方法
     getHomeMultiData() {
       getHomeMultiData().then(res => {
@@ -91,7 +87,6 @@ export default {
         //push进数组进行保存
         this.goods[type].list.push(...res.data.list)
         this.goods[type].page += 1
-        this.$refs.scroll.finishPullUp()
       }).catch(err => {
         console.log(err)
       })
@@ -109,6 +104,10 @@ export default {
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
+    //监听图片加载
+    this.$bus.$on('itemImageLoad', () => {
+      this.$refs.scroll.refresh()
+    })
   }
 }
 </script>

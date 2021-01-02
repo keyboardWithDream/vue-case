@@ -32,6 +32,9 @@ export default {
     },
     finishPullUp() {
       this.scroll.finishPullUp()
+    },
+    refresh() {
+      this.scroll.refresh()
     }
   },
   mounted() {
@@ -50,6 +53,9 @@ export default {
     this.scroll.on('pullingUp', () => {
       this.$emit('pullingUp')
     })
+
+    //刷新高度
+    this.scroll.refresh()
   }
 }
 </script>
