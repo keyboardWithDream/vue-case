@@ -12,7 +12,7 @@
             :pull-up-load="true"
             @pullingUp="loadMore"
             @scroll="contentScroll">
-      <swiper :items="banners.list" @swiperImageLoad="swiperImageLoad"></swiper>
+      <home-swiper :items="banners.list" @swiperImageLoad="swiperImageLoad"/>
       <recommend-view :recommends="recommends.list"/>
       <feature-view/>
       <tab-control
@@ -27,7 +27,6 @@
 
 <script>
 import NavBar from "@/components/common/navbar/NavBar";
-import Swiper from "@/components/common/swiper/Swiper";
 import TabControl from "@/components/content/tabControl/TabControl";
 import GoodsList from "@/components/content/goods/GoodsList";
 import Scroll from "@/components/common/scroll/Scroll";
@@ -35,6 +34,7 @@ import BackTop from "@/components/content/backtop/BackTop";
 
 import {debounce} from "@/common/utils";
 
+import HomeSwiper from "@/views/home/childComps/HomeSwiper";
 import RecommendView from "@/views/home/childComps/RecommendView";
 import FeatureView from "@/views/home/childComps/FeatureView";
 
@@ -45,7 +45,7 @@ export default {
   components: {
     TabControl,
     NavBar,
-    Swiper,
+    HomeSwiper,
     RecommendView,
     FeatureView,
     GoodsList,
